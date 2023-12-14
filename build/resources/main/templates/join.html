@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Join Form</title>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Demo</title>
+  <meta name="description" content=""/>
+  <meta name="viewport" content="width=device-width"/>
+  <base href="/"/>
+  <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+  <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+  <style>
+    body {
+  font-family: 'Open Sans', sans-serif;
+  background: #333333;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1, h2, h3, h4, .title {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+form {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #444444;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  background: #444444;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  color: white;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+  display: block;
+  width: calc(100% - 22px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type="submit"], .kakao-login-button {
+  width: 48%;
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+.kakao-login-button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kakao-login-button img {
+  width: 100%;
+  max-height: 38px;
+}
+
+table {
+  color: white;
+}
+  </style>
+</head>
+<body>
+
+<h1>Join</h1>
+
+<form id="joinForm">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required><br><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required><br><br>
+
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" required><br><br>
+
+  <label for="phoneNumber">PhoneNumber:</label>
+  <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
+
+  <div class="button-container">
+    <input type="submit" value="Submit">
+    <a href="https://kauth.kakao.com/oauth/authorize?client_id=d724c4c3a21fde9dd46123f7eb45872a&redirect_uri=http://localhost:8080/katalk/callback&response_type=code" class="kakao-login-button">
+      <img src="https://developers.kakao.com/assets/img/about/logos/login/kr/kakao_account_login_btn_medium_wide_ov.png">
+    </a>
+  </div>
+  <button type="submit">회원가입</button>
+</form>
+
+<!--<a href="https://kauth.kakao.com/oauth/logout?client_id=d724c4c3a21fde9dd46123f7eb45872a&logout_redirect_uri=http://localhost:8080/oauth/logout&response_type=code">로그아웃</a>-->
+<!--<a href="/logout">로그아웃</a>-->
+<!--<a href="/katalk/unlink">연결해제</a>-->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('joinForm');
+    form.onsubmit = async function(e) {
+          e.preventDefault();
+
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const username = document.getElementById('username').value;
+          const phoneNumber = document.getElementById('phoneNumber').value;
+
+          const data = {
+              email,
+              password,
+              username,
+              phoneNumber
+          };
+
+          try {
+              const response = await fetch('http://localhost:8080/join', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+              });
+
+              const result = await response.json();
+
+              if (result.success) {
+                  alert("회원가입에 성공했습니다!");
+              } else {
+                  alert("Error: " + result.error.message);
+              }
+
+          } catch (error) {
+              console.error('Error:', error);
+          }
+      });
+  });
+</script>
+
+</body>
+</html>
