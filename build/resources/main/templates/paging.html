@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>paging</title>
+    <style>
+        body {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 80%;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #555;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #444;
+        }
+
+        .paging {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .paging div {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .paging div:last-child {
+            margin-right: 0;
+        }
+
+        .right-align-button {
+            text-align: right;
+        }
+
+        button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1>게시판</h1>
+    </header>
+    <table>
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="board: ${boardList}">
+            <td th:text="${board.getId}"></td>
+            <td><a th:href="@{${board.getId}|(page = ${boardList.number + 1})}" th:text="${board.getTitle()}"></a></td>
+            <td th:text="*{#temporals.format(board.getCreateTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="right-align-button">
+        <button onclick="create()">글쓰기</button>
+    </div>
+    <div class="paging" th:if="${boardList.totalPages > 0}"> <div> <a th:href="@{/board/paging(page=1)}">처음</a> </div> <div> <a th:href="${boardList.first} ? '#' : @{/board/paging(page=${boardList.number})}">이전</a> </div>
+        <span th:each="page: ${#numbers.sequence(startpage, endpage)}">
+            <span th:if="${page == boardList.number + 1}" th:text="${page}"></span>
+            <span th:unless="${page == boardList.number + 1}">
+                <a th:href="@{/board/paging(page=${page})}" th:text="${page}"></a>
+            </span>
+        </span>
+
+        <div>
+            <a th:href="${boardList.last} ? '#' : @{/board/paging(page=${boardList.number + 2})}">다음</a>
+        </div>
+        <div>
+            <a th:href="@{/board/paging(page=${boardList.totalPages})}">마지막</a>
+        </div>
+    </div>
+    <footer>
+        <p>© 2023 박소진. 모든 권리는 소진이에게</p>
+    </footer>
+</div>
+<script>
+    const create = () => {
+        location.href = "/board/create";
+    }
+</script>
+</body>
+
+</html>
