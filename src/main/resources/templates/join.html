@@ -152,6 +152,8 @@ table {
 
               if (result.success) {
                   alert("회원가입에 성공했습니다!");
+
+                  window.location.href = '/';
               } else {
                   alert("Error: " + result.error.message);
               }

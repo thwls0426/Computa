@@ -110,7 +110,7 @@
 <div class="button-container">
     <button onclick="create()">글쓰기</button>
     <button onclick="read()">목록</button>
-    <button onclick="join()">회원가입</button>
+    <button onclick="login()">로그인</button>
 </div>
 <script>
     const create = () => {
@@ -119,9 +119,11 @@
     const read = () => {
         location.href = "/board/paging";
     }
-    const join = () => {
-        location.href = "/join";
+
+    const login = () => {
+        location.href = "/login";
     }
+
 </script>
 </body>
 
