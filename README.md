@@ -23,4 +23,4 @@
 - 데이터베이스: MySQL Cloud
 - 개발 언어: Java, HTML, CSS, Java Script, jQuery, Springboot
 - 형상 관리: git, github
-- IDE: IntelliJ IDEA Community, Spring Boot 2.6.7, JDK 11, Spring Data JPA, Thymeleaf
+- IDE: IntelliJ IDEA Community, Spring Boot 2.7.6, JDK 11, Spring Data JPA, Thymeleaf
