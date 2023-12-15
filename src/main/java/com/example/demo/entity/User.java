@@ -35,18 +35,18 @@ public class User {
     @Convert(converter = StringArrayConverter.class)
     private List<String> roles = new ArrayList<>();
 
-    @Column(length = 100)
+    @Column
     private String provider;
 
     @Builder
-    public User(int id, String email, String password, String username, String provider, String phoneNumber, List<String> roles) {
+    public User(int id, String email, String password, String username, String phoneNumber, List<String> roles, String provider) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
         this.phoneNumber = phoneNumber;
-        this.provider = provider;
         this.roles = roles;
+        this.provider = provider;
     }
 
 

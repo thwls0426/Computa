@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Join Form</title>
@@ -115,7 +115,6 @@ table {
       <img src="https://developers.kakao.com/assets/img/about/logos/login/kr/kakao_account_login_btn_medium_wide_ov.png">
     </a>
   </div>
-  <button type="submit">회원가입</button>
 </form>
 
 <!--<a href="https://kauth.kakao.com/oauth/logout?client_id=d724c4c3a21fde9dd46123f7eb45872a&logout_redirect_uri=http://localhost:8080/oauth/logout&response_type=code">로그아웃</a>-->
@@ -124,8 +123,8 @@ table {
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('joinForm');
-    form.onsubmit = async function(e) {
+      const form = document.getElementById('joinForm');
+      form.addEventListener('submit', async function(e) {
           e.preventDefault();
 
           const email = document.getElementById('email').value;

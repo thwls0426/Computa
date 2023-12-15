@@ -30,7 +30,6 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     @Transactional
     public void join(UserRequest.JoinDTO requestDTO) {
@@ -42,9 +41,6 @@ public class UserService {
 
         try {
             userRepository.save(requestDTO.toEntity(passwordEncoder));
-
-            SignUpMessageSender.sendMessage("01088224115", requestDTO.getPhoneNumber()
-                    , "환영합니다. 회원가입이 완료되었습니다.");
 
         } catch (Exception e) {
             throw new Exception500(e.getMessage());

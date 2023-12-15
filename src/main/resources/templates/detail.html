@@ -126,156 +126,154 @@
 <script th:inline="javascript">
 
     const listReq = () => {
-        console.log("목록 요청");
-        const page = [[${page}]];
-        location.href = "/board/paging?page="+page;
-    };
+         console.log("목록 요청");
+         const page = /*[[${page}]]*/;  // Thymeleaf 변수를 사용하지 않음
+         location.href = "/board/paging?page=" + page;
+     };
+
+     const updateReq = () => {
+         console.log("수정 요청");
+         const id = /*[[${board.id}]]*/;  // Thymeleaf 변수를 사용하지 않음
+         location.href = "/board/update/" + id;
+     };
+
+     const deleteReq = () => {
+         console.log("삭제 요청");
+         const id = /*[[${board.id}]]*/;  // Thymeleaf 변수를 사용하지 않음
+         location.href = "/board/delete/" + id;
+     };
 
 
-    const updateReq = () => {
-        console.log("수정 요청");
-        const id = [[${board.id}]];
-        location.href = "/board/update/" + id;
-    };
+     const commentWrite = () => {
+            const jsWriter = document.getElementById("writer").value;
+            const jsContents = document.getElementById("contents").value;
+            console.log("작성자: ", jsWriter);
+            console.log("내용: ", jsContents);
+            const jsId = [[${board.id}]];
+
+            $.ajax({
+                type: "post",
+                url: "/comment/save",
+                data: {
+                    "writer": jsWriter,
+                    "contents": jsContents,
+                    "boardId": jsId
+                },
+                success: function (res) {
+                    console.log("요청성공", res);
+                    let output = "<table>";
+                    output += "<tr><th>댓글번호</th>";
+                    output += "<th>작성자</th>";
+                    output += "<th>내용</th>";
+                    output += "<th>작성시간</th>";
+                    output += "<th>수정시간</th>";
+                    for (let i in res) {
+                        output += "<tr>";
+                        output += "<td>" + res[i].id + "</td>";
+                        output += "<td>" + res[i].writer + "</td>";
+                        output += "<td>" + res[i].contents + "</td>";
+                        output += "<td>" + res[i].createTime + "</td>";
+                        output += "<td>" + res[i].updateTime + "</td>";
+                        output += "<td><button onclick='commentDelete(" + res[i].id + ")'>삭제</button></td>";
+                        output += "</tr>";
+
+                        loadComments();
+                        document.getElementById('writer').value = '';
+                        document.getElementById('contents').value = '';
+                    }
+
+                    output += "</table>";
+                    document.getElementById('comment-list').innerHTML = output;
+                    document.getElementById('writer').value = '';
+                    document.getElementById('contents').value = '';
+                },
+                error: function (err) {
+                    console.log("요청실패", err);
+                }
+            });
+        };
 
 
-    const deleteReq = () => {
-        console.log("삭제 요청");
-        const id = [[${board.id}]];
-        location.href = "/board/delete/" + id;
-    };
+ const loadComments = () => {
+     const jsId = [[${board.id}]];
+     $.ajax({
+         type: "GET",
+         url: "/comment/list/" + jsId,
+         success: function (res) {
+             console.log("댓글 목록 조회 성공", res);
+             let output = "<table>";
+             output += "<tr><th>댓글번호</th>";
+             output += "<th>작성자</th>";
+             output += "<th>내용</th>";
+             output += "<th>수정</th>";
+             output += "<th>삭제</th>";
+            for (let i in res) {
+                 output += "<tr>";
+                 output += "<td>" + res[i].id + "</td>";
+                 output += "<td>" + res[i].writer + "</td>";
+                 output += "<td>" + res[i].contents + "</td>";
+                 output += "<td><button onclick='showUpdateForm(" + res[i].id + ", \"" + res[i].writer + "\", \"" + res[i].contents + "\", \"" + res[i].updateTime + "\")'>수정</button></td>";
+                 output += "<td><button onclick='commentDelete(" + res[i].id + ")'>삭제</button></td>";
+                 output += "</tr>";
+             }
+             output += "</table>";
+             document.getElementById('comment-list').innerHTML = output;
+         },
+         error: function (err) {
+             console.error("댓글 목록 조회 실패", err);
+             }
+         });
+     };
 
 
-    const commentWrite = () => {
-           const jsWriter = document.getElementById("writer").value;
-           const jsContents = document.getElementById("contents").value;
-           console.log("작성자: ", jsWriter);
-           console.log("내용: ", jsContents);
-           const jsId = [[${board.id}]];
-
-           $.ajax({
-               type: "post",
-               url: "/comment/save",
-               data: {
-                   "writer": jsWriter,
-                   "contents": jsContents,
-                   "boardId": jsId
-               },
-               success: function (res) {
-                   console.log("요청성공", res);
-                   let output = "<table>";
-                   output += "<tr><th>댓글번호</th>";
-                   output += "<th>작성자</th>";
-                   output += "<th>내용</th>";
-                   output += "<th>작성시간</th>";
-                   output += "<th>수정시간</th>";
-                   for (let i in res) {
-                       output += "<tr>";
-                       output += "<td>" + res[i].id + "</td>";
-                       output += "<td>" + res[i].writer + "</td>";
-                       output += "<td>" + res[i].contents + "</td>";
-                       output += "<td>" + res[i].createTime + "</td>";
-                       output += "<td>" + res[i].updateTime + "</td>";
-                       output += "<td><button onclick='commentDelete(" + res[i].id + ")'>삭제</button></td>";
-                       output += "</tr>";
-
-                       loadComments();
-                       document.getElementById('writer').value = '';
-                       document.getElementById('contents').value = '';
-                   }
-
-                   output += "</table>";
-                   document.getElementById('comment-list').innerHTML = output;
-                   document.getElementById('writer').value = '';
-                   document.getElementById('contents').value = '';
-               },
-               error: function (err) {
-                   console.log("요청실패", err);
-               }
-           });
-       };
+     const showUpdateForm = (id, writer, contents, updateTime) => {
+         document.getElementById('update-comment-id').value = id;
+         document.getElementById('update-comment-writer').value = writer;
+         document.getElementById('update-comment-contents').value = contents;
+         document.getElementById('update-comment-updateTime').value = updateTime;
+         document.getElementById('update-form').style.display = 'block';
+     };
 
 
-const loadComments = () => {
-    const jsId = [[${board.id}]];
-    $.ajax({
-        type: "GET",
-        url: "/comment/list/" + jsId,
-        success: function (res) {
-            console.log("댓글 목록 조회 성공", res);
-            let output = "<table>";
-            output += "<tr><th>댓글번호</th>";
-            output += "<th>작성자</th>";
-            output += "<th>내용</th>";
-            output += "<th>수정</th>";
-            output += "<th>삭제</th>";
-           for (let i in res) {
-                output += "<tr>";
-                output += "<td>" + res[i].id + "</td>";
-                output += "<td>" + res[i].writer + "</td>";
-                output += "<td>" + res[i].contents + "</td>";
-                output += "<td><button onclick='showUpdateForm(" + res[i].id + ", \"" + res[i].writer + "\", \"" + res[i].contents + "\", \"" + res[i].updateTime + "\")'>수정</button></td>";
-                output += "<td><button onclick='commentDelete(" + res[i].id + ")'>삭제</button></td>";
-                output += "</tr>";
-            }
-            output += "</table>";
-            document.getElementById('comment-list').innerHTML = output;
-        },
-        error: function (err) {
-            console.error("댓글 목록 조회 실패", err);
-            }
-        });
-    };
+     const updateComment = () => {
+         const id = document.getElementById('update-comment-id').value;
+         const writer = document.getElementById('update-comment-writer').value;
+         const contents = document.getElementById('update-comment-contents').value;
+
+         $.ajax({
+             type: "POST",
+             url: "/comment/update",
+             data: {
+                 "id": id,
+                 "writer": writer,
+                 "contents": contents
+             },
+             success: function (res) {
+                 console.log("댓글 수정 성공", res);
+                 document.getElementById('update-form').style.display = 'none';
+                 loadComments();
+             },
+             error: function (err) {
+                 console.error("댓글 수정 실패", err);
+             }
+         });
+     };
 
 
-    const showUpdateForm = (id, writer, contents, updateTime) => {
-        document.getElementById('update-comment-id').value = id;
-        document.getElementById('update-comment-writer').value = writer;
-        document.getElementById('update-comment-contents').value = contents;
-        document.getElementById('update-comment-updateTime').value = updateTime;
-        document.getElementById('update-form').style.display = 'block';
-    };
+    const commentDelete = (id) => {
+     $.ajax({
+         type: "DELETE",
+         url: "/comment/delete/" + id,
+         success: function (res) {
+             console.log("삭제 성공", res);
 
-
-    const updateComment = () => {
-        const id = document.getElementById('update-comment-id').value;
-        const writer = document.getElementById('update-comment-writer').value;
-        const contents = document.getElementById('update-comment-contents').value;
-
-        $.ajax({
-            type: "POST",
-            url: "/comment/update",
-            data: {
-                "id": id,
-                "writer": writer,
-                "contents": contents
-            },
-            success: function (res) {
-                console.log("댓글 수정 성공", res);
-                document.getElementById('update-form').style.display = 'none';
-                loadComments();
-            },
-            error: function (err) {
-                console.error("댓글 수정 실패", err);
-            }
-        });
-    };
-
-
-   const commentDelete = (id) => {
-    $.ajax({
-        type: "DELETE",
-        url: "/comment/delete/" + id,
-        success: function (res) {
-            console.log("삭제 성공", res);
-
-            loadComments();
-        },
-        error: function (err) {
-            console.log("삭제 실패", err);
-        }
-    });
-};
+             loadComments();
+         },
+         error: function (err) {
+             console.log("삭제 실패", err);
+         }
+     });
+ };
 
 
 </script>
