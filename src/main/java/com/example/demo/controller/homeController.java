@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +12,13 @@ public class homeController {
         return "index"; //게시물작성
     }
 
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login"; // "join.html" 파일을 렌더링
+    }
     @GetMapping("/join")
-    public String join(Model model) {
-        return "join"; // "join.html" 파일을 렌더링
+    public String join(Model model){
+        return "join";
     }
 }

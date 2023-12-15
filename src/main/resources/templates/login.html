@@ -41,7 +41,7 @@
             padding: 10px;
             font-size: 16px;
             width: calc(100% - 20px);
-            margin-bottom: 10px; /* 간격을 조절 */
+            margin-bottom: 10px;
             box-sizing: border-box;
         }
 
@@ -56,8 +56,9 @@
             cursor: pointer;
         }
 
-        button:hover {
-            background: #45a049;
+        .button-container {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -70,7 +71,10 @@
     <label for="password">비밀번호:</label>
     <input type="password" id="password" name="password">
 
-    <button onclick="login()">로그인</button>
+    <div class="button-container">
+        <button onclick="login()">로그인하기</button>
+        <button onclick="join()">회원가입</button>
+    </div>
 </div>
 
 <script>
@@ -103,6 +107,11 @@
         .catch(error => {
             alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         });
+    };
+
+    const join = () => {
+            location.href = '/join';
+
     };
 </script>
 </body>
