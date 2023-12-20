@@ -12,13 +12,14 @@ public class homeController {
         return "index"; //게시물작성
     }
 
-
-    @GetMapping("/login")
-    public String login(Model model) {
-        return "login"; // "join.html" 파일을 렌더링
-    }
     @GetMapping("/join")
     public String join(Model model){
         return "join";
     }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
+    }
+
 }

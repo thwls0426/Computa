@@ -104,10 +104,10 @@ table {
   <input type="password" id="password" name="password" required><br><br>
 
   <label for="username">Username:</label>
-  <input type="text" id="username" name="username" required><br><br>
+  <input type="text" id="username" name="username" autocomplete="username" required><br><br>
 
   <label for="phoneNumber">PhoneNumber:</label>
-  <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
+  <input type="text" id="phoneNumber" name="phoneNumber" autocomplete="phoneNumber" required><br><br>
 
   <div class="button-container">
     <input type="submit" value="Submit">
@@ -154,6 +154,7 @@ table {
                   alert("회원가입에 성공했습니다!");
 
                   window.location.href = '/';
+
               } else {
                   alert("Error: " + result.error.message);
               }
