@@ -39,6 +39,7 @@ public class UserService {
 
         requestDTO.setPassword(encodedPassword);
 
+
         try {
             userRepository.save(requestDTO.toEntity(passwordEncoder));
 
@@ -52,14 +53,16 @@ public class UserService {
         try {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                     = new UsernamePasswordAuthenticationToken(requestDTO.getEmail(), requestDTO.getPassword());
+            System.out.println("우앵우앵");
 
             Authentication authentication = authenticationManager.authenticate(
                     usernamePasswordAuthenticationToken
             );
+            System.out.println("뿌앵뿌앵");
 
             // ** 인증 완료 값을 받아온다.
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-
+            System.out.println("키키키릴");
             // ** 토큰 발급.
             return JwtTokenProvider.create(customUserDetails.getUser());
 

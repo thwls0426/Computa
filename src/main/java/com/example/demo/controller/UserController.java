@@ -28,7 +28,6 @@ public class UserController {
      * @RequestBody
      * JSON 으로 넘어오는 데이터를 UserRequest.LoginDTO 형태로 변경 해주는 역할.
      */
- 
 
     @PostMapping("/join")
     public ResponseEntity<?> join(@RequestBody @Valid UserRequest.JoinDTO requestDTO, Error error) {
@@ -46,14 +45,14 @@ public class UserController {
         return ResponseEntity.ok(ApiUtils.success(null));
     }
 
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequest.JoinDTO requestDTO, Error error) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequest.JoinDTO requestDTO) {
 
         String jwt = userService.login(requestDTO);
-
+        System.out.println(jwt);
         return ResponseEntity.ok().header(JwtTokenProvider.HEADER, jwt)
                 .body(ApiUtils.success(null));
-
 
     }
 }

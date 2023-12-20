@@ -3,13 +3,14 @@ package com.example.demo.entity;
 import com.example.demo.core.utils.StringArrayConverter;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 @Table(name="Users")
@@ -25,7 +26,7 @@ public class User {
     @Column(length = 256)
     private String password;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String username;
 
     @Column(length = 100)
@@ -55,6 +56,7 @@ public class User {
         System.out.println(email);
         System.out.println(password);
         System.out.println(username);
+        System.out.println(phoneNumber);
         System.out.println(roles);
     }
 }
